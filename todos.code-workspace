@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "packages/auth_service"
+    },
+    {
+      "path": "packages/matrix_ui"
+    },
+    {
+      "path": "packages/todo_repository"
+    },
+    {
+      "path": "packages/user_repository"
+    }
+  ],
+  "settings": {}
+}

@@ -1,0 +1,13 @@
+name: cache
+description: A simple in memory cache made for dart
+version: 0.0.1
+homepage:  mehade.dev
+publish_to: none
+
+environment:
+  sdk: ">=2.15.0-178.1.beta <3.0.0"
+
+dev_dependencies:
+  matrix_lints: 
+    path: ../matrix_lints
+  test: ^1.19.5

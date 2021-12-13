@@ -1,0 +1,19 @@
+name: matrix_ui
+description: A new Flutter package project.
+version: 0.0.1
+homepage: mehade.dev
+
+environment:
+  sdk: ">=2.15.0 <3.0.0"
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_spinkit: ^5.1.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  matrix_lints: 
+    path: ../matrix_lints

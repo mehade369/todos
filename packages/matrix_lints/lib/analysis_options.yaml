@@ -1,0 +1,53 @@
+include: all_lint_rules.yaml
+
+analyzer:
+  exclude:
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
+    - "test/.test_coverage.dart"
+    - "bin/cache/**"
+    - "lib/generated_plugin_registrant.dart"
+    - "lib/gen"
+
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
+
+  errors:
+    # Without ignore here, we cause import of all_lint_rules to warn, because some rules conflict.
+    # We explicitly enabled even conflicting rules and are fixing the conflicts in this file.
+    included_file_warning: ignore
+    missing_required_param: error
+    missing_return: error
+
+
+# Explicitly disable only the rules we do not want.
+linter:
+  rules:
+    public_member_api_docs: false
+
+    # Conflicts with `prefer_single_quotes`
+    # Single quotes are easier to type and don't compromise on readability.
+    prefer_double_quotes: false
+    # Incompatible with `prefer_final_locals` that we want because having immutable local variables when
+    # applicable makes larger functions more predictable and easier to reason about, so we
+    # use `prefer_final_locals` instead.
+    unnecessary_final: false
+    # conflicts with `always_use_package_imports`
+    prefer_relative_imports: false
+    # Conflicts with `omit_local_variable_types` and other rules.
+    # As per Dart guidelines, we want to avoid unnecessary types to make the code
+    # more readable.
+    # See https://dart.dev/guides/language/effective-dart/design#avoid-type-annotating-initialized-local-variables
+    always_specify_types: false
+    depend_on_referenced_packages: false
+    # Conflicts with the convention used by flutter, which puts `Key? key`
+    # and `required Widget child` last.
+    always_put_required_named_parameters_first: false
+    diagnostic_describe_all_properties: false
+    # Should not be forced
+    lines_longer_than_80_chars: false
+    library_private_types_in_public_api: false
+    one_member_abstracts: false
+    avoid_classes_with_only_static_members: false
+    prefer_expression_function_bodies: false
