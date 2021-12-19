@@ -15,7 +15,7 @@ Future<void> bootstrap({
   required final TodoRepository todoRepository,
 }) async {
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(
+    const SystemUiOverlayStyle().copyWith(
       //! iOS only
       statusBarBrightness: Brightness.light,
 
@@ -38,17 +38,23 @@ Future<void> bootstrap({
     DeviceOrientation.portraitDown,
   ]);
 
-  BlocOverrides.runZoned(
-    () {
-      runApp(
-        App(
-          authService: authService,
-          userRepository: userRepository,
-          todoRepository: todoRepository,
-        ),
+  await runZonedGuarded(
+    () async {
+      await BlocOverrides.runZoned(
+        () async {
+          runApp(
+            App(
+              authService: authService,
+              userRepository: userRepository,
+              todoRepository: todoRepository,
+            ),
+          );
+        },
+        blocObserver: MyBlocObserver(),
       );
     },
-    blocObserver: MyBlocObserver(),
+    (final error, final stackTrace) =>
+        log(error.toString(), stackTrace: stackTrace),
   );
 }
 
