@@ -5,7 +5,7 @@ homepage:  mehade.dev
 publish_to: none
 
 environment:
-  sdk: ">=2.15.0-178.1.beta <3.0.0"
+  sdk: ">=2.15.0 <3.0.0"
 
 dev_dependencies:
   matrix_lints: 

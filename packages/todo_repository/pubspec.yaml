@@ -5,17 +5,17 @@ homepage: mehade.dev
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
-  flutter: ">=1.17.0"
+  flutter: ">=2.8.1"
 
 dependencies:
-  cloud_firestore: ^3.1.4
+  cloud_firestore: ^3.1.5
   flutter:
     sdk: flutter
   freezed_annotation: ^1.1.0
   uuid: ^3.0.5
 
 dev_dependencies:
-  build_runner: ^2.1.5
+  build_runner: ^2.1.7
   freezed: ^1.1.0
   matrix_lints: 
     path: ../matrix_lints

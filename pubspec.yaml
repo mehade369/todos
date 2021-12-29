@@ -5,6 +5,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.15.0 <3.0.0"
+
 dependencies:
   auth_service: 
     path: packages/auth_service
@@ -14,9 +15,9 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.0
-  flutter_slidable: ^1.1.0
+  flutter_slidable: ^1.2.0
   freezed_annotation: ^1.1.0
-  google_fonts: ^2.1.0
+  google_fonts: ^2.1.1
   matrix_ui: 
     path: packages/matrix_ui
   timeago: ^3.1.0
