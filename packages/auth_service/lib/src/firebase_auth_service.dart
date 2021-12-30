@@ -85,7 +85,7 @@ class FirebaseAuthService implements AuthService {
   /// Listen for the current user auth state change.
   /// and, cache the user in the cache client.
   ///
-  /// This is a wrapper around [FirebaseAuth.onAuthStateChanged].
+  /// This is a wrapper around [FirebaseAuth.authStateChanges].
   ///
 
   @override
