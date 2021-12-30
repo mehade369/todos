@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:auth_service/auth_service.dart';
 import 'package:bloc/bloc.dart';
@@ -14,20 +13,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required final AuthService authService,
   })  : _authService = authService,
         super(authService.currentUser.toAuthState) {
-    _userSubscription = authService.onAuthStateChanged.listen((final authUser) {
-      log('AuthBloc: authUser: $authUser');
-      add(_UserChanged(authUser));
-    });
+    _userSubscription = authService.onAuthStateChanged.listen((final authUser) => add(_UserChanged(authUser)));
 
     on<AuthEvent>(
       (final event, final emit) => event.when(
         signOut: () async {
           await _authService.signOut();
         },
-        userChanged: (final user) {
-          log('AuthBloc: userChanged: $user');
-          emit(user.toAuthState);
-        },
+        userChanged: (final user) => emit(user.toAuthState),
       ),
     );
   }

@@ -34,6 +34,23 @@ extension StringValidatingExtension on String? {
 
     return null;
   }
+
+  /// Returns true if the String is null or empty
+  /// 
+  /// ```dart
+  /// String? str = null;
+  /// str.isNullOrEmpty; // true
+  /// 
+  /// str = '';
+  /// str.isNullOrEmpty; // true
+  /// 
+  /// str = 'some string';
+  /// str.isNullOrEmpty; // false
+  /// ```
+
+  bool get isNullOrEmpty {
+    return this == null || this!.isEmpty;
+  }
 }
 
 extension StringCapitalizeExtension on String {
@@ -55,17 +72,15 @@ extension StringCapitalizeExtension on String {
         return substring(0, 1).toUpperCase() + substring(1);
     }
   }
-}
 
-extension StringDecapitalizeExtension on String {
   /// Returns a copy of this string having its first letter lowercased, or the
   /// original string, if it's empty or already starts with a lower case letter.
   ///
   /// ```dart
-  /// print('abcd'.decapitalize()) // abcd
-  /// print('Abcd'.decapitalize()) // abcd
+  /// print('abcd'.uncapitalized()) // abcd
+  /// print('Abcd'.uncapitalized()) // abcd
   /// ```
-  String decapitalize() {
+  String uncapitalized() {
     switch (length) {
       case 0:
         return this;

@@ -11,18 +11,17 @@ class EmailInputFiled extends StatelessWidget {
   final TextEditingController _emailController;
 
   @override
-  Widget build(final BuildContext context) {
-    return TextFormField(
-      textInputAction: TextInputAction.next,
-      controller: _emailController,
-      decoration: InputDecoration(
-        hintText: 'Email',
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
+  Widget build(final BuildContext context) => TextFormField(
+        controller: _emailController,
+        validator: (final value) => value.isValidEmail,
+        keyboardType: TextInputType.emailAddress,
+        textInputAction: TextInputAction.next,
+        textCapitalization: TextCapitalization.none,
+        decoration: InputDecoration(
+          hintText: 'Email',
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
         ),
-      ),
-      keyboardType: TextInputType.emailAddress,
-      validator: (final value) => value.isValidEmail,
-    );
-  }
+      );
 }

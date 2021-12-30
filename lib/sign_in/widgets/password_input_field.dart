@@ -18,20 +18,29 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
 
   @override
   Widget build(final BuildContext context) => TextFormField(
-        keyboardType: TextInputType.visiblePassword,
         controller: widget.passwordController,
+        validator: (final value) => value.isValidPassword,
+        keyboardType: TextInputType.visiblePassword,
         textInputAction: TextInputAction.done,
+        textCapitalization: TextCapitalization.none,
         decoration: InputDecoration(
           hintText: 'Password',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
           ),
           suffixIcon: IconButton(
+            splashRadius: 10,
             icon: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 400),
               child: isObscured
-                  ? const Icon(Icons.visibility_off)
-                  : const Icon(Icons.visibility),
+                  ? const Icon(
+                      Icons.visibility_off,
+                      key: Key('visibility_off'),
+                    )
+                  : const Icon(
+                      Icons.visibility,
+                      key: Key('visibility'),
+                    ),
               transitionBuilder: (
                 final child,
                 final animation,
@@ -41,14 +50,9 @@ class _PasswordInputFieldState extends State<PasswordInputField> {
                 child: child,
               ),
             ),
-            onPressed: () {
-              setState(() {
-                isObscured = !isObscured;
-              });
-            },
+            onPressed: () => setState(() => isObscured = !isObscured),
           ),
         ),
         obscureText: isObscured,
-        validator: (final value) => value.isValidPassword,
       );
 }

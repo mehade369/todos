@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flow_builder/flow_builder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,9 +7,7 @@ import 'package:matrix_ui/matrix_ui.dart';
 import 'package:todos/sign_in/sign_in.dart';
 
 class SignInView extends StatefulWidget {
-  const SignInView({
-    final Key? key,
-  }) : super(key: key);
+  const SignInView({final Key? key}) : super(key: key);
 
   @override
   State<SignInView> createState() => _SignInViewState();
@@ -23,6 +23,7 @@ class _SignInViewState extends State<SignInView> {
     _emailController.dispose();
     _passwordController.dispose();
     _formKey.currentState?.dispose();
+    log('SignInView disposed');
     super.dispose();
   }
 
@@ -37,15 +38,13 @@ class _SignInViewState extends State<SignInView> {
   @override
   Widget build(final BuildContext context) {
     return BlocListener<SignInCubit, SignInState>(
-      listener: (final context, final state) {
-        state.whenOrNull(
-          failure: context.showSnackBar,
-        );
-      },
+      listener: (final context, final state) => state.whenOrNull(
+        failure: context.showSnackBar,
+      ),
       child: SignFormFields(
         formKey: _formKey,
         children: [
-          const TopTitle(subTitle: 'Welcome back'),
+          const TopTitle(title: 'ToDos', subTitle: 'Welcome back'),
 
           // Email
           const SizedBox(height: 20),
@@ -57,44 +56,37 @@ class _SignInViewState extends State<SignInView> {
 
           const SizedBox(height: 20),
           BlocBuilder<SignInCubit, SignInState>(
-            builder: (final context, final state) => AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: state.maybeWhen(
-                loading: () => const Loading(),
-                orElse: () => Column(
-                  children: [
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(45),
-                        textStyle:
-                            Theme.of(context).textTheme.bodyText1?.copyWith(),
-                      ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          context
-                              .read<SignInCubit>()
-                              .signInWithEmailAndPassword(
-                                email: _emailController.text,
-                                password: _passwordController.text,
-                              );
-                        }
-                      },
-                      child: const Text('Sign In'),
+            builder: (final context, final state) => state.maybeWhen(
+              loading: () => const Loading(),
+              orElse: () => Column(
+                children: [
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(45),
+                      textStyle: Theme.of(context).textTheme.subtitle1,
                     ),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<SignInCubit>().signInWithEmailAndPassword(
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                            );
 
-                    const SizedBox(height: 20),
-
-                    OutlinedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size.fromHeight(45),
-                      ),
-                      onPressed: () {
-                        context.read<SignInCubit>().signInWithGoogle();
-                      },
-                      child: const Text('Sign in with Google'),
+                        _emailController.clear();
+                        _passwordController.clear();
+                      }
+                    },
+                    child: const Text('Sign In'),
+                  ),
+                  const SizedBox(height: 20),
+                  OutlinedButton(
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size.fromHeight(45),
                     ),
-                  ],
-                ),
+                    onPressed: context.read<SignInCubit>().signInWithGoogle,
+                    child: const Text('Sign in with Google'),
+                  ),
+                ],
               ),
             ),
           ),

@@ -22,8 +22,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
       add(_TodosUpdated(todos));
     });
 
-    on<TodosEvent>((final event, final emit) {
-      event.when(
+    on<TodosEvent>(
+      (final event, final emit) => event.when(
         updateTodo: (final todo) async {
           try {
             await _todoRepository.updateTodo(todo);
@@ -67,8 +67,8 @@ class TodosBloc extends Bloc<TodosEvent, TodosState> {
             emit(_Error(e.message ?? e.code));
           }
         },
-      );
-    });
+      ),
+    );
   }
 
   final AuthService _authService;

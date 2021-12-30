@@ -10,14 +10,11 @@ class BottomSection extends StatelessWidget {
   }) : super(key: key);
 
   final VoidCallback onTap;
-
+  final String subtitle;
   final String title;
 
-  final String subtitle;
-
   @override
-  Widget build(final BuildContext context) {
-    return Center(
+  Widget build(final BuildContext context) => Center(
       child: Text.rich(
         TextSpan(
           text: title,
@@ -35,5 +32,4 @@ class BottomSection extends StatelessWidget {
         ),
       ),
     );
-  }
 }

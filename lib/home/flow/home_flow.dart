@@ -11,15 +11,14 @@ class HomeFlow extends StatelessWidget {
         super(key: key);
 
   final AuthUser _authUser;
+
   @override
   Widget build(final BuildContext context) => FlowBuilder<HomeFlowState>(
         state: HomeFlowState(),
-        onGeneratePages: (final state, final pages) {
-          return [
-            MaterialPage<void>(
-              child: HomePage(authUser: _authUser),
-            ),
-          ];
-        },
+        onGeneratePages: (final state, final pages) => [
+          MaterialPage<void>(
+            child: HomePage(authUser: _authUser),
+          ),
+        ],
       );
 }

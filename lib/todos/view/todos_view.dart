@@ -13,64 +13,60 @@ class TodosView extends StatelessWidget {
   @override
   Widget build(final BuildContext context) => Center(
         child: BlocBuilder<TodosBloc, TodosState>(
-          builder: (final context, final state) {
-            return state.when(
-              loading: Loading.new,
-              empty: () => const Text('No todos found yet'),
-              loaded: (final todos) => ListView.separated(
-                separatorBuilder: (final context, final index) =>
-                    const SizedBox(height: 8),
-                padding: const EdgeInsets.all(16),
-                itemCount: todos.length,
-                itemBuilder: (final context, final index) {
-                  final todo = todos[index];
-                  return Slidable(
-                    key: Key(todo.uid),
-                    startActionPane: ActionPane(
-                      motion: const ScrollMotion(),
-                      // All actions are defined in the children parameter.
-                      children: [
-                        // A SlidableAction can have an icon and/or a label.
-                        SlidableAction(
-                          onPressed: (final context) {
-                            context
-                                .read<TodosBloc>()
-                                .add(TodosEvent.deleteTodo(todo));
-                          },
-                          backgroundColor: Theme.of(context).colorScheme.error,
-                          foregroundColor: Colors.white,
-                          icon: Icons.delete,
-                          label: 'Delete',
-                        ),
-                        SlidableAction(
-                          onPressed: (final context) {
-                            Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                fullscreenDialog: true,
-                                builder: (final _) => BlocProvider.value(
-                                  value: context.read<TodosBloc>(),
-                                  child: AddEditTodo(
-                                    title: todo.title,
-                                  ),
-                                ),
+          builder: (final context, final state) => state.when(
+            loading: Loading.new,
+            empty: () => const Text('No todos found yet'),
+            loaded: (final todos) => ListView.separated(
+              separatorBuilder: (final context, final index) =>
+                  const SizedBox(height: 8),
+              padding: const EdgeInsets.all(16),
+              itemCount: todos.length,
+              itemBuilder: (final context, final index) {
+                final todo = todos[index];
+                return Slidable(
+                  key: Key(todo.uid),
+                  startActionPane: ActionPane(
+                    motion: const ScrollMotion(),
+                    // All actions are defined in the children parameter.
+                    children: [
+                      // A SlidableAction can have an icon and/or a label.
+                      SlidableAction(
+                        onPressed: (final context) {
+                          context
+                              .read<TodosBloc>()
+                              .add(TodosEvent.deleteTodo(todo));
+                        },
+                        backgroundColor: Theme.of(context).colorScheme.error,
+                        foregroundColor: Colors.white,
+                        icon: Icons.delete,
+                        label: 'Delete',
+                      ),
+                      SlidableAction(
+                        onPressed: (final context) {
+                          Navigator.of(context).push(
+                            MaterialPageRoute<void>(
+                              fullscreenDialog: true,
+                              builder: (final _) => BlocProvider.value(
+                                value: context.read<TodosBloc>(),
+                                child: const AddEditTodo(),
                               ),
-                            );
-                          },
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondaryVariant,
-                          foregroundColor: Colors.white,
-                          icon: Icons.edit,
-                          label: 'Edit',
-                        ),
-                      ],
-                    ),
-                    child: _ListCard(todo: todo),
-                  );
-                },
-              ),
-              error: Error.new,
-            );
-          },
+                            ),
+                          );
+                        },
+                        backgroundColor:
+                            Theme.of(context).colorScheme.secondaryVariant,
+                        foregroundColor: Colors.white,
+                        icon: Icons.edit,
+                        label: 'Edit',
+                      ),
+                    ],
+                  ),
+                  child: _ListCard(todo: todo),
+                );
+              },
+            ),
+            error: Error.new,
+          ),
         ),
       );
 }
@@ -84,23 +80,21 @@ class _ListCard extends StatelessWidget {
   final Todo todo;
 
   @override
-  Widget build(final BuildContext context) {
-    return Card(
-      margin: EdgeInsets.zero,
-      child: ListTile(
-        title: Text(todo.title),
-        subtitle: Text(timeago.format(todo.updatedAt)),
-        trailing: Container(
-          decoration: BoxDecoration(
-            color: todo.status.toColor,
-            borderRadius: BorderRadius.circular(8),
+  Widget build(final BuildContext context) => Card(
+        margin: EdgeInsets.zero,
+        child: ListTile(
+          title: Text(todo.title),
+          subtitle: Text(timeago.format(todo.updatedAt)),
+          trailing: Container(
+            decoration: BoxDecoration(
+              color: todo.status.toColor,
+              borderRadius: BorderRadius.circular(8),
+            ),
+            height: 12,
+            width: 12,
           ),
-          height: 12,
-          width: 12,
         ),
-      ),
-    );
-  }
+      );
 }
 
 extension _TodoStatusToColor on TodoStatus {

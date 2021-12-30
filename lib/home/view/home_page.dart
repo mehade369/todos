@@ -14,47 +14,48 @@ class HomePage extends StatelessWidget {
         super(key: key);
 
   final AuthUser _authUser;
+
   @override
-  Widget build(final BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (final context) => TodosBloc(
-            todoRepository: context.read<TodoRepository>(),
-            authService: context.read<AuthService>(),
+  Widget build(final BuildContext context) => MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (final context) => TodosBloc(
+              todoRepository: context.read<TodoRepository>(),
+              authService: context.read<AuthService>(),
+            ),
           ),
-        ),
-      ],
-      child: const HomeView(),
-    );
-  }
+        ],
+        child: HomeView(authUser: _authUser),
+      );
 }
 
 class HomeView extends StatelessWidget {
   const HomeView({
     final Key? key,
-  }) : super(key: key);
+    required final AuthUser authUser,
+  })  : _authUser = authUser,
+        super(key: key);
+
+  final AuthUser _authUser;
 
   @override
-  Widget build(final BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.exit_to_app),
-            padding: const EdgeInsets.only(right: 16),
-            onPressed: () {
-              context.read<AuthBloc>().add(const AuthEvent.signOut());
-            },
-          ),
-        ],
-      ),
-      drawer: const MyDrawer(),
-      body: const TodosView(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
+  Widget build(final BuildContext context) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Home'),
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              padding: const EdgeInsets.only(right: 16),
+              onPressed: () => context.read<AuthBloc>().add(
+                    const AuthEvent.signOut(),
+                  ),
+            ),
+          ],
+        ),
+        drawer: MyDrawer(authUser: _authUser),
+        body: const TodosView(),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => Navigator.of(context).push(
             MaterialPageRoute<void>(
               fullscreenDialog: true,
               builder: (final _) => BlocProvider.value(
@@ -62,10 +63,8 @@ class HomeView extends StatelessWidget {
                 child: const AddEditTodo(),
               ),
             ),
-          );
-        },
-        child: const Icon(Icons.add),
-      ),
-    );
-  }
+          ),
+          child: const Icon(Icons.add),
+        ),
+      );
 }

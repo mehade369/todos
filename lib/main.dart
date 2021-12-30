@@ -12,8 +12,20 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  final authService = FirebaseAuthService();
+
+  /// We only listen for the first element of the stream,
+  /// and dispose the stream after that.
+  ///
+  /// This is because we only want to cache the authUser ASAP.
+  /// So, when the AuthBloc call `currentUser` to check if the user is
+  /// logged in or not, we get the previous cached user.
+  ///
+  await authService.onAuthStateChanged.first;
+
   await bootstrap(
-    authService: FirebaseAuthService(),
+    authService: authService,
     userRepository: FirestoreUserRepository(),
     todoRepository: FirestoreTodoRepository(),
   );

@@ -32,7 +32,7 @@ class App extends StatelessWidget {
         child: MultiBlocProvider(
           providers: [
             BlocProvider(
-              create: (final context) => AuthBloc(
+              create: (final _) => AuthBloc(
                 authService: _authService,
               ),
             ),

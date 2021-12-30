@@ -9,15 +9,16 @@ import 'package:todos/sign_in/sign_in.dart';
 
 class UserFlow extends StatelessWidget {
   const UserFlow({final Key? key}) : super(key: key);
+
   @override
   Widget build(final BuildContext context) => FlowBuilder<AuthState>(
         state: context.watch<AuthBloc>().state,
         onGeneratePages: (final state, final pages) {
-          log('UserFlow: onGeneratePages: state: $state');
+          log('UserFlow onGeneratePages ---> $state');
 
           return state.when(
             authenticated: (final authUser) => [
-               MaterialPage<void>(
+              MaterialPage<void>(
                 child: HomeFlow(authUser: authUser),
               ),
             ],

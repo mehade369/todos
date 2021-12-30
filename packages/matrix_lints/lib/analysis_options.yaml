@@ -51,3 +51,4 @@ linter:
     one_member_abstracts: false
     avoid_classes_with_only_static_members: false
     prefer_expression_function_bodies: false
+    avoid_redundant_argument_values: false

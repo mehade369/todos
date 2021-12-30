@@ -82,6 +82,12 @@ class FirebaseAuthService implements AuthService {
     }
   }
 
+  /// Listen for the current user auth state change.
+  /// and, cache the user in the cache client.
+  ///
+  /// This is a wrapper around [FirebaseAuth.onAuthStateChanged].
+  ///
+
   @override
   Stream<AuthUser?> get onAuthStateChanged =>
       _firebaseAuth.authStateChanges().map((final user) {

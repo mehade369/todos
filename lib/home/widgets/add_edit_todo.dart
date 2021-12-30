@@ -7,34 +7,29 @@ import 'package:todos/todos/todos.dart';
 class AddEditTodo extends StatefulWidget {
   const AddEditTodo({
     final Key? key,
-    final this.title,
   }) : super(key: key);
-
-  final String? title;
 
   @override
   State<AddEditTodo> createState() => _AddEditTodoState();
 }
 
 class _AddEditTodoState extends State<AddEditTodo> {
+  late final GlobalKey<FormState> _fromKey;
   late final TextEditingController _textEditingController;
-
-  late final _fromKey = GlobalKey<FormState>();
-
-  TodoPriority _todoPriority = TodoPriority.low;
-  TodoStatus _todoStatus = TodoStatus.notStarted;
-
-  @override
-  void initState() {
-    _textEditingController = TextEditingController(text: widget.title);
-    _fromKey.currentState?.validate();
-    super.initState();
-  }
+  var _todoPriority = TodoPriority.low;
+  var _todoStatus = TodoStatus.notStarted;
 
   @override
   void dispose() {
     _textEditingController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _textEditingController = TextEditingController();
+    _fromKey = GlobalKey<FormState>();
+    super.initState();
   }
 
   @override
@@ -50,23 +45,28 @@ class _AddEditTodoState extends State<AddEditTodo> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8),
+                  const SizedBox(height: 20),
+                  const Center(
                     child: Text(
                       'Title',
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 26),
                     ),
                   ),
+                  const SizedBox(height: 20),
                   TextFormField(
                     controller: _textEditingController,
                     keyboardType: TextInputType.text,
                     textCapitalization: TextCapitalization.sentences,
+                    textInputAction: TextInputAction.done,
                     maxLines: 3,
+                    decoration: const InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Enter your todo',
+                    ),
                     validator: (final value) {
-                      if (value != null && value.isEmpty) {
+                      if (value.isNullOrEmpty) {
                         return 'Please enter a title';
                       }
-                      return null;
                     },
                   ),
                   const SizedBox(height: 20),
@@ -75,7 +75,7 @@ class _AddEditTodoState extends State<AddEditTodo> {
                     children: [
                       Text(
                         'Priority:',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                       DropdownButton<TodoPriority>(
                         value: _todoPriority,
@@ -109,7 +109,7 @@ class _AddEditTodoState extends State<AddEditTodo> {
                     children: [
                       Text(
                         'Status:',
-                        style: Theme.of(context).textTheme.subtitle1,
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                       DropdownButton<TodoStatus>(
                         value: _todoStatus,
@@ -142,18 +142,10 @@ class _AddEditTodoState extends State<AddEditTodo> {
             ),
           ),
           floatingActionButton: FloatingActionButton(
-            child: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _textEditingController.text.isEmpty
-                  ? const Icon(
-                      Icons.dangerous_outlined,
-                      key: Key('adf'),
-                    )
-                  : const Icon(
-                      Icons.check,
-                      key: Key('aasdfsdf'),
-                    ),
-            ),
+            child: _textEditingController.text.isEmpty ||
+                    _fromKey.currentState!.validate()
+                ? const Icon(Icons.dangerous_outlined)
+                : const Icon(Icons.check),
             onPressed: () {
               if (_fromKey.currentState!.validate()) {
                 context.read<TodosBloc>().add(
@@ -163,7 +155,10 @@ class _AddEditTodoState extends State<AddEditTodo> {
                         priority: _todoPriority,
                       ),
                     );
+
                 Navigator.of(context).pop();
+
+                _textEditingController.clear();
               }
             },
           ),

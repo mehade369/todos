@@ -14,8 +14,8 @@ class SignInCubit extends Cubit<SignInState> {
         _authService = authService,
         super(const _Initial());
 
-  final UserRepository _userRepository;
   final AuthService _authService;
+  final UserRepository _userRepository;
 
   Future<void> signInWithEmailAndPassword({
     required final String email,
@@ -44,6 +44,34 @@ class SignInCubit extends Cubit<SignInState> {
             createdAt: authUser.createdAt,
             email: authUser.email!,
             displayName: authUser.displayName,
+            photoUrl: authUser.photoUrl,
+          ),
+        );
+      }
+    } on AuthException catch (e) {
+      emit(_Failure(e.message ?? e.code));
+    }
+  }
+
+  Future<void> signUpWithEmailAndPassword({
+    required final String email,
+    required final String password,
+    required final String name,
+  }) async {
+    emit(const _Loading());
+
+    try {
+      final authUser = await _authService.signUpWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+
+      if (authUser != null) {
+        await _userRepository.createUserIfNotExists(
+          User.createUser(
+            uid: authUser.uid,
+            email: authUser.email ?? email,
+            displayName: authUser.displayName ?? name,
             photoUrl: authUser.photoUrl,
           ),
         );

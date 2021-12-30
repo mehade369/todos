@@ -58,20 +58,23 @@ Future<void> bootstrap({
   );
 }
 
-class MyBlocObserver implements BlocObserver {
+class MyBlocObserver extends BlocObserver {
   @override
   void onChange(final BlocBase bloc, final Change change) {
     log('onChange -- ${bloc.runtimeType}, $change');
+    super.onChange(bloc, change);
   }
 
   @override
   void onClose(final BlocBase bloc) {
     log('onClose -- ${bloc.runtimeType}');
+    super.onClose(bloc);
   }
 
   @override
   void onCreate(final BlocBase bloc) {
     log('onCreate -- ${bloc.runtimeType}');
+    super.onCreate(bloc);
   }
 
   @override
@@ -81,18 +84,21 @@ class MyBlocObserver implements BlocObserver {
     final StackTrace stackTrace,
   ) {
     log('onError -- ${bloc.runtimeType}, $error, $stackTrace');
+    super.onError(bloc, error, stackTrace);
   }
 
   @override
   void onEvent(final Bloc bloc, final Object? event) {
     log('onEvent -- ${bloc.runtimeType}, $event');
+    super.onEvent(bloc, event);
   }
 
-  @override
-  void onTransition(
-    final Bloc bloc,
-    final Transition transition,
-  ) {
-    log('onTransition -- ${bloc.runtimeType}, $transition');
-  }
+  // @override
+  // void onTransition(
+  //   final Bloc bloc,
+  //   final Transition transition,
+  // ) {
+  //   log('onTransition -- ${bloc.runtimeType}, $transition');
+  //   super.onTransition(bloc, transition);
+  // }
 }
